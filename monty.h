@@ -35,6 +35,8 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
+extern char **GLOBAL_BUFFER;
+
 char **file_separator(char *buffer);
 unsigned int  _line_count(char *buffer);
 char *fill_buffer(FILE *fd1, FILE *fd2);
