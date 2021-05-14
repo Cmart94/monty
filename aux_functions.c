@@ -25,6 +25,11 @@ char **file_separator(char *buffer)
 		{
 			array_lines[j] = &buffer[i];
 			flag_line = 0;
+			if (buffer[i] == '\n')
+			{
+				buffer[i] = ' ';
+				continue;
+			}
 		}
 		if (buffer[i] == '\n')
 		{
@@ -86,18 +91,12 @@ char **line_separator(char *line_opcode)
 	int words_count = 0, i = 0, char_count = 0;
 
 	printf("ARRAY_LINES dentro de line separator: %s\n", line_opcode);
-	/*for (i = 0; line_opcode[i] != '\0'; i++)
-	{
-		if ((line_opcode[i] != '\0') && (line_opcode[i] != '\n') 
-		    && (line_opcode[i] != ' '))
-			char_count++;
-	}
-	printf("Caracteres validos : %d\n", char_count);
-	if (char_count == 0);
+	if (line_opcode == NULL)
 	{
 		free(cpy);
-		return(array_words);
-		}*/
+		printf("LINEA VACIA");
+		return (NULL);
+	}
 	token = strtok(cpy, " ");
 	while (token != NULL)
 	{

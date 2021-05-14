@@ -60,14 +60,16 @@ void main(int argc, char *argv[])
 	printf("Array de lineas es --------\n");
 	for (i = 0; i < line_count; i++)
 	{
-		printf("Linea numero: %d\n", i + 1);
-		printf("%s\n", GLOBAL_BUFFER[i]);
-		/* Separar lineas por palabras*/ 
+		printf("\nLinea numero: %d\n", i + 1);
+		printf("GLOBAL_VA: %s\n", GLOBAL_BUFFER[i]);
+		/* Separar lineas por palabras 
 		array_words = line_separator(array_lines[i]);
-		printf("PRIMER PALABRA: %s\n", array_words[0]);
-		/*compar cada linea con comando monty*/
+		if (array_words == NULL)
+			continue;
+			printf("PRIMER PALABRA: %s\n", array_words[0]);*/
+		/*compar cada linea con comando monty
 		compare_execution(array_words[0],&head, i);
-		free(array_words);
+		free(array_words);*/
 	}
 
 	free(buffer);
