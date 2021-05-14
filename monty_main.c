@@ -4,9 +4,8 @@ void main(int argc, char *argv[])
 {
 	FILE *fd1, *fd2;
 	int cl1, cl2;
-	unsigned int file_len = 0, i = 0, line_count = 0, j = 0;
-	int flag_line = 1;
-	char c, *buffer = NULL, **array_lines = NULL, **array_words = NULL;
+	unsigned int i = 0, line_count = 0, j = 0;
+	char *buffer = NULL, **array_lines = NULL, **array_words = NULL;
 	stack_t *head = NULL;
 
 	/* numero Argumentos es diferente a 2?*/
@@ -23,17 +22,14 @@ void main(int argc, char *argv[])
 		perror("No se pudo abrir archivo");
 		exit(EXIT_FAILURE);
 	}
-	/* Tamaño de Buffer */
-	while ((c = fgetc(fd1)) != EOF)
-		file_len++;
 	/* Llenamos el buffer con characteres del archivo */
-	buffer = malloc(sizeof(char) * (file_len + 1));
-	while ((c = fgetc(fd2)) != EOF)
+	buffer = fill_buffer(fd1, fd2);
+	if (buffer == NULL)
 	{
-		buffer[i] = c;
-		i++;
+		perror("Error: malloc failed");
+		exit(EXIT_FAILURE);
 	}
-	buffer[file_len] = '\0';
+	/* Cerramos descriptores*/
 	cl1 = fclose(fd1);
 	cl2 = fclose(fd2);
 	if ((cl1 == EOF) | (cl2 == EOF))
@@ -43,18 +39,45 @@ void main(int argc, char *argv[])
 	}	
 	printf("Contenido de archivo en array -------------\n");
 	printf("%s", buffer);
-	/* Contar numero de lineas en el buffer */
-	for (i = 0; buffer[i] != '\0'; i++)
+	line_count = _line_count(buffer);
+	/* Agregar cada linea a doble puntero de lineas */
+	array_lines = file_separator(buffer);
+	if (array_lines == NULL)
 	{
-		if (buffer[i] == '\n')
-			line_count++;
+		perror("Error: malloc failed");
+		exit(EXIT_FAILURE);
 	}
-	printf("Numero de lineas: %d\n", line_count);
+	/* recorrer array de lineas para comparar con funciones */
+	printf("Array de lineas es --------\n");
+	for (i = 0; i < line_count; i++)
+	{
+		printf("numero de linea: %d", i);
+		printf("%s\n", array_lines[i]);
+		/* Separar lineas por palabras */
+		array_words = line_separator(array_lines[i]);
+		/*compar cada linea con comando monty*/
+		compare_execution(array_words,&head, i);
+		free(array_words);
+	}
+
+	free(buffer);
+	free(array_lines);
+}
+char **file_separator(char *buffer)
+{
+	char **array_lines = NULL;
+	unsigned int line_count = 0, i, j = 0, flag_line = 1;
+	
+	/* sacar cantidad de lineas */
+	line_count = _line_count(buffer);
+	printf("Cantidad de lineas es: %d\n", line_count);
 	/* Agregar cada linea a doble puntero de lineas */
 	array_lines = malloc(sizeof(char*) * line_count);
 	if (array_lines == NULL)
-		exit(EXIT_FAILURE);
-	i = 0;
+	{
+		free(array_lines);
+		return (NULL);
+	}
         for (i = 0; buffer[i] != '\0'; i++)
 	{
 		if (flag_line == 1)
@@ -69,20 +92,37 @@ void main(int argc, char *argv[])
 			j++;
 		}
 	}
-	/* recorrer array de lineas para comparar con funciones */
-	printf("Array de lineas es --------\n");
-	for (i = 0; i < line_count; i++)
-	{
-		printf("%s\n", array_lines[i]);
-		/* Separar lineas por palabras */
-		array_words = line_separator(array_lines[i]);
-		/*compar cada linea con comando monty*/
-		compare_execution(array_words,&head, i);
-		free(array_words);
-	}
+	return (array_lines);
+}
+unsigned int  _line_count(char *buffer)
+{
+	unsigned int i, line_count = 0;
 
-	free(buffer);
-	free(array_lines);
+	for (i = 0; buffer[i] != '\0'; i++)
+	{
+		if (buffer[i] == '\n')
+			line_count++;
+	}
+	return (line_count);
+}
+char *fill_buffer(FILE *fd1, FILE *fd2)
+{
+	char *buffer, c;
+	unsigned int file_len = 0, i = 0;
+	
+	while ((c = fgetc(fd1)) != EOF)
+		file_len++;
+	/* Llenamos el buffer con characteres del archivo */
+	buffer = malloc(sizeof(char) * (file_len + 1));
+	if (buffer == NULL)
+		return (NULL);
+	while ((c = fgetc(fd2)) != EOF)
+	{
+		buffer[i] = c;
+		i++;
+	}
+	buffer[file_len] = '\0';
+	return (buffer);
 }
 
 void *compare_execution(char **array_words, stack_t **head, unsigned int n_line)
