@@ -5,8 +5,9 @@
 * @argc: count of arguments passed to the program
 * @argv: pointer to an array of char pointers to arguments
 *
-* Return: Success (EXIT_SUCCESS) or error (EXIT_FAILURE)
+* Return: void fuction, EXIT_FAILURE inc case of fail.
 */
+char **GLOBAL_BUFFER;
 void main(int argc, char *argv[])
 {
 	FILE *fd1, *fd2;
@@ -54,16 +55,18 @@ void main(int argc, char *argv[])
 		perror("Error: malloc failed");
 		exit(EXIT_FAILURE);
 	}
+	GLOBAL_BUFFER = array_lines;
 	/* recorrer array de lineas para comparar con funciones */
 	printf("Array de lineas es --------\n");
 	for (i = 0; i < line_count; i++)
 	{
-		printf("numero de linea: %d", i);
-		printf("%s\n", array_lines[i]);
-		/* Separar lineas por palabras */
+		printf("Linea numero: %d\n", i + 1);
+		printf("%s\n", GLOBAL_BUFFER[i]);
+		/* Separar lineas por palabras*/ 
 		array_words = line_separator(array_lines[i]);
+		printf("PRIMER PALABRA: %s\n", array_words[0]);
 		/*compar cada linea con comando monty*/
-		compare_execution(array_words,&head, i);
+		compare_execution(array_words[0],&head, i);
 		free(array_words);
 	}
 

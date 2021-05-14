@@ -41,7 +41,7 @@ char **file_separator(char *buffer);
 unsigned int  _line_count(char *buffer);
 char *fill_buffer(FILE *fd1, FILE *fd2);
 char **line_separator(char *line_opcode);
-void *compare_execution(char **array_words, stack_t **head, unsigned int n_line);
+void *compare_execution(char *array_words, stack_t **head, unsigned int n_line);
 void _push(stack_t **stack, unsigned int line_number);
 void _pall(stack_t **stack, unsigned int line_number);
 void _pint(stack_t **stack, unsigned int line_number);

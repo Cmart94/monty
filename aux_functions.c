@@ -83,8 +83,21 @@ char *fill_buffer(FILE *fd1, FILE *fd2)
 char **line_separator(char *line_opcode)
 {
 	char **array_words = NULL, *token = NULL, *cpy = strdup(line_opcode);
-	int words_count = 0, i = 0;
+	int words_count = 0, i = 0, char_count = 0;
 
+	printf("ARRAY_LINES dentro de line separator: %s\n", line_opcode);
+	/*for (i = 0; line_opcode[i] != '\0'; i++)
+	{
+		if ((line_opcode[i] != '\0') && (line_opcode[i] != '\n') 
+		    && (line_opcode[i] != ' '))
+			char_count++;
+	}
+	printf("Caracteres validos : %d\n", char_count);
+	if (char_count == 0);
+	{
+		free(cpy);
+		return(array_words);
+		}*/
 	token = strtok(cpy, " ");
 	while (token != NULL)
 	{
@@ -96,6 +109,7 @@ char **line_separator(char *line_opcode)
 	if (array_words == NULL)
 		exit(EXIT_FAILURE);
 	token = strtok(line_opcode, " ");
+	i = 0;
 	while (token != NULL)
 	{
 		array_words[i] = token;
