@@ -28,6 +28,7 @@ void _pall(stack_t **stack, unsigned int line_number)
 	printf("ESTAMOS DENTRO FUNCION PALL --------------------------------------\n");
         printf("direccion head %p\n", stack);
 	printf("Numero de linea: %d\n", line_number);
+//HOLA ESTE ES UN COMENTARIO DE PRIEBA
 }
 /**
  * _pint - Prints the top value of a stack_t linked list
